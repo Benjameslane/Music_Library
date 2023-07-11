@@ -16,3 +16,4 @@ namespace MusicLibraryWebAPI.Models
         public string Genre { get; set; }
     }
 }
+

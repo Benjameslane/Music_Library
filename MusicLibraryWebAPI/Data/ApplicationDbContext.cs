@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MusicLibraryWebAPI.Models;
 
 namespace MusicLibraryWebAPI.Data
@@ -9,6 +10,11 @@ namespace MusicLibraryWebAPI.Data
        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
 
+        }
+
+        internal IActionResult FirstOrDefault()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MusicLibraryWebAPI.Data;
 using MusicLibraryWebAPI.Models;
 
@@ -17,7 +18,7 @@ namespace MusicLibraryWebAPI.Controllers
         {
             _context = context;
         }
-        // GET: api/<MusicsController>
+        // GET: api/Musics
         [HttpGet]
         public IActionResult Get()
         {
@@ -25,13 +26,23 @@ namespace MusicLibraryWebAPI.Controllers
             return Ok(musics);
         }
 
-        // GET api/<MusicsController>/5
+
+
+        // GET api/Musics/5
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var music = _context.Musics.FirstOrDefault(m => m.Id == id);
+            if (music == null)
+            {
+                return NotFound(); // Returns NotFound when there is no music with such id
+            }
+            return Ok(music); // Returns 200 status code
+
+
         }
+
 
         // POST api/<MusicsController>
         [HttpPost]
@@ -39,19 +50,53 @@ namespace MusicLibraryWebAPI.Controllers
         {
             _context.Musics.Add(music);
             _context.SaveChanges();
-            return StatusCode(201, music);
+            return CreatedAtAction(nameof(Get), new { id = music.Id }, music); // Returns 201 status code
         }
+
+
+
+
 
         // PUT api/<MusicsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Music music)
         {
+
+            var existingMusic = _context.Musics.FirstOrDefault(m => m.Id == id);
+            if (existingMusic == null)
+            {
+                return NotFound();
+            }
+
+            existingMusic.Title = music.Title;
+            existingMusic.Artist = music.Artist;
+            existingMusic.Genre = music.Genre;
+            _context.SaveChanges();
+            return Ok(existingMusic); // Returns 200 status code
+
         }
 
+
+
+
+
         // DELETE api/<MusicsController>/5
+
+
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var music = _context.Musics.FirstOrDefault(m => m.Id == id);
+            if (music == null)
+            {
+                return NotFound();
+            }
+            _context.Musics.Remove(music);
+            _context.SaveChanges();
+            return NoContent(); // Returns NoContent status code
+
+
         }
     }
 }
+
