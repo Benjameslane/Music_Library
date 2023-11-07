@@ -9,10 +9,10 @@ namespace MusicLibraryWebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddCors();
             // Add services to the container.
 
-
+            
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -40,7 +40,7 @@ namespace MusicLibraryWebAPI
 
             app.UseAuthorization();
 
-
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.MapControllers();
 
             app.Run();
